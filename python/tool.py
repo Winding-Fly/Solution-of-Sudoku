@@ -6,9 +6,10 @@ class Tool:
 		self.n=self.data.n
 		self.boxsize=self.data.boxsize
 	def init_array(self):
+	# initlize the array to 0 matrix
 		return [[0 for i in range(0,self.n)] for j in range(0,self.n)]
 	def type_(self,a):
-	#check if a has choice or certain
+	#check if a has choices or is certain
 		b=[]
 		if type(a)==type(b):
 			return 1
@@ -26,6 +27,7 @@ class Tool:
 			b[i][j] = b[i][j][0]
 		self.i_update(b,a)
 	def check_(self,a,b,i,j):
+	#check whether the number in vertex(i,j) is appropriate
 		if self.type_(a[i][j]):
 			return 1
 		for m in range(0,self.n):
@@ -87,6 +89,7 @@ class Tool:
 					return 1
 		return 0
 	def checksum(self,a,k):
+	#compute the sum of value k that we have filled
 		s=0
 		b=[]
 		for i in range(0,self.n):
@@ -130,6 +133,7 @@ class Tool:
 			return 1
 		return 0
 	def grid_rc_clear(self,q,a,b,k,i,rc):
+	#clear the choices of value k for those vertices that is in the same row or column with the vertices in q except vertices in q
 		c=0
 		if rc == 0:
 		#rc:0 for row, 1 for column
@@ -155,6 +159,7 @@ class Tool:
 		self.update(a,b)
 		return c
 	def clear_k(self,a,b,k):
+	#clear the choices of value k for all vertices
 		for i in range(0,self.n):
 			for j in range(self.n):
 				if self.type_(a[i][j]):
@@ -196,6 +201,7 @@ class Tool:
 					c=1
 		return c
 	def choose_f_queue(self,a,b):
+	#choose the vertices that only have 2 choices and are in list b for hypothesis
 		q=[]
 		for i in range(0,self.n):
 			for j in range(0,self.n):
@@ -205,6 +211,7 @@ class Tool:
 							q.append((i,j,k))
 		return q
 	def f_choose_queue(self,a):
+	#initlize the choose queue for hypothesis
 		q=[]
 		for i in range(0,self.n):
 			for j in range(0,self.n):
@@ -213,6 +220,7 @@ class Tool:
 						q.append((i,j,k))
 		return q
 	def choose_e_queue(self,a,b):
+	#get all vertices that have choices and in list b for hypothesis
 		q=[]
 		for i in range(0,self.n):
 			for j in range(0,self.n):
@@ -222,10 +230,12 @@ class Tool:
 							q.append((i,j,k))
 		return q
 	def select(self,q):
+	#choose a vertexin list q with a value in random
 		l=len(q)
 		n=random.randint(0,l-1)
 		return q[n]
 	def choose_coordinate(self,a,b):
+	#choose a vertex in list k with a value in random, we firstly choose verte that only have 2 choice to simplify
 		q=self.choose_f_queue(a,b)
 		if q:
 			return self.select(q)
@@ -253,12 +263,14 @@ class Tool:
 				return 1
 		return 0
 	def grid_sum(self,b,i,k):
+	#compute the sum of value k in i-th grid
 		s=[]
 		for j in range(0,self.n):
 			if b[i][j] == k:
 				s.append((i,j))
 		return s
 	def rc2(self,q):
+	#compute column or row that the vertices in q is in, if 0, is row; if 1, is column
 		x1,y1=self.i_map(q[0][0],q[0][1])
 		x2,y2=self.i_map(q[1][0],q[1][1])
 		if x1 == x2:
@@ -266,6 +278,7 @@ class Tool:
 		if y1 == y2:
 			return y1,1
 	def rc3(self,q):
+	#compute column or row that the vertices in q is in, if 0, is row; if 1, is column
 		x1,y1=self.i_map(q[0][0],q[0][1])
 		x2,y2=self.i_map(q[1][0],q[1][1])
 		x3,y3=self.i_map(q[2][0],q[2][1])
