@@ -13,17 +13,19 @@ class sudoku:
 		print('The puzzle to solve:')
 		self.r_print(self.xy)
 		self.choice=[i for i in range(1,self.n+1)]
-		self.init_array()
-		self.box=[[0 for i in range(0,self.n)] for j in range(0,self.n)]
+		self.init_array_choice()
+		self.box=self.tool.init_array()
 		self.tool.update(self.xy,self.box)
 		self.out=[]#the number that is enough
-		self.stop=0
-	def init_array(self):
+		self.stop=0#the signal to stop; if 1 ,solved; else, no solution
+	def init_array_choice(self):
+	#change 0 to the choices of the number that can fill in
 		for i in range(0,self.n):
 			for j in range(0,self.n):
 				if not self.xy[i][j]:
 					self.xy[i][j] = self.choice[:]
 	def list_str(self,a):
+	#change the list of x-y coordinate to string to print or save
 		p=[]
 		for i in range(0,self.n):
 			c=[]
@@ -37,9 +39,11 @@ class sudoku:
 		pf='\n\n'.join(c)
 		return pf
 	def r_print(self,a):
+	#to print the list
 		pf=self.list_str(a)
 		print(pf)
 	def zero(self,a):
+	#change list of the choices in the list to 0
 		q=self.tool.init_array()
 		for i in range(0,self.n):
 			for j in range(0,self.n):
@@ -51,9 +55,11 @@ class sudoku:
 					q[i][j] = a[i][j]
 		return q
 	def save(self):
+	#save the result
 		with open(self.save_path,'w') as f:
 			f.write(self.list_str(self.xy))
 	def solve(self):
+	#main loop
 		while not self.stop:
 			self.operation()
 		if self.stop == 1:
@@ -67,6 +73,7 @@ class sudoku:
 		return 1
 	def operation(self):
 		self.update_out(self.xy,self.box,self.out)
+		#we first delete enough choices as we can, then hypothesis some vertices
 		if not self.simple_check(self.xy,self.box):
 			self.update_out(self.xy,self.box,self.out)
 			if self.stop:
@@ -77,12 +84,15 @@ class sudoku:
 			if self.hypothesis(self.xy,self.box,self.out,queue,0,0,0,0) != 1:
 				self.stop=2
 	def update_out(self,a,b,out):
+	#update out array
 		for k in range(1,self.n+1):
 			if self.tool.checksum(a,k) and k not in out:
 				out.append(k)
 		for k in out:
+		#if a value k is used enough times, we cannot fill it in, so we clear it in the other choices
 			self.tool.clear_k(a,b,k)
 	def magic(self,a,b):
+	#to simplify some hypothesis to decrease the time
 		c=0
 		for i in range(0,self.n):
 			for k in range(1,self.n+1):
@@ -95,7 +105,8 @@ class sudoku:
 						c=c+1
 		return c
 	def hypothesis(self,a,b,out,queue,l,m,n,c):
-		#c is the times we have hypothesis
+	# we in array hypothesis some point with value k in queue
+		#c is the times we have hypothesised
 		while queue:
 			if self.stop:
 				return 1
@@ -118,6 +129,7 @@ class sudoku:
 				return 1
 		return l,m,n
 	def subhypothesis(self,a,b,out,queue,i,j,k,c):
+	#For each point(i,j) with value k we check if it is right
 		hout=out[:]
 		while self.tool.check_contridict(a,b):
 			self.update_out(a,b,hout)
@@ -137,9 +149,11 @@ class sudoku:
 				self.stop = 1
 				self.xy=a
 				return 1
+		#we get contridict
 		queue.remove((i,j,k))
 		return 0
 	def simple_check(self,a,b):
+	#check if some choices is contridict.
 		#check every grid every choice,if we delete one choice then return 1
 		c=0
 		self.tool.check_row_choice(a,b,5)
@@ -150,8 +164,10 @@ class sudoku:
 		if self.tool.detect(self.xy):
 			self.stop=1
 		if c:
+		#we have deleted some choices
 			return 1
 		else:
+		#we delete nothing
 			return 0
 s=sudoku()
 s.solve()
