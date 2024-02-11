@@ -1,0 +1,8 @@
+{
+"n":9,
+"boxsize":3,
+"path":"data.txt",
+"input_path":"input.txt",
+"save_path":"result.txt",
+"input_class":1
+}
