@@ -46,16 +46,30 @@ txt:
 1 0 0	7 6 8	0 0 2
 0 0 0	3 0 0	0 0 0
 ```
+we divide each grid by tab and carriage return, separate each number in the same grid by blank space, and replace the blank with 0
 
--`result.txt`:
+-`result.txt`: It saves the solution of the puzzle in the same format as it in the `input.txt`
 
 py:
 
--`data.py`:
+-`data.py`: It stores default configuration. If `config.txt` is blank, we'll use this file's data.
 
--`indata.py`:
+-`indata.py`: It is used to load the configuration and the puzzle. It includes 4 functions--`config`, `Input_data`, `Indata`, `Transform_data`. We firstly load configuration in `data.py`. The function `config` loads `config.txt` to upgrade if it is not blank. The function `Indata` loads puzzle by coordinate in `data.py`. The function `Transform_data` loads puzzle in `input.txt`. The function `Input_data` checks input_class to choose the way we will load.
 
--`main.py`:
+-`main.py`: It is the main code. We load the basic configuration and puzzle from `indata.py` at first. It contains 11 functions divided into 2 classes -- for output and for solution.  
+For output:
+--`list_str`: The result is saved in 2d-list. For beautiful output, we use this function to transform the list into a suitable string. Such string will be printed just as we fill in the `input.txt`
+--`r_print`: It aims to print the string that is transformed from the list by function `list_str`.
+--`zero`: Because of the algorithm， if we cannot solve but still want to get the puzzle we have filled, at this time the list is 3d-array beacuse it contains some lists of choices that we can fill in the blank. This function is to replace these lists with 0 for beautiful output.
+--`save`: It saves the result in the file with the path we have set.
+For solution:
+--`solve`: It contains the main loop of the algorithm.
+--`operation`: In one loop all of operations are in this function
+--`update_out`: It is used to clear the choice so we wouldn't fill too many the same numbers by check and upgrade a special array.
+--`magic`: It aims to simplify and leave out some assumption.
+--`hypothesis`: 
+--`subhypothesis`: 
+--`simple_check`: 
 
 -`tool.py`:
 
