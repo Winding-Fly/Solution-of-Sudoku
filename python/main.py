@@ -2,7 +2,6 @@ from tool import Tool
 from data import _Data
 from indata import In_data
 import time
-#import torch
 class sudoku:
 	def __init__(self):
 		self.data=In_data()
@@ -14,14 +13,16 @@ class sudoku:
 		print('The puzzle to solve:')
 		self.r_print(self.xy)
 		self.choice=[i for i in range(1,self.n+1)]
-		for i in range(0,self.n):
-			for j in range(0,self.n):
-				if not self.xy[i][j]:
-					self.xy[i][j] = self.choice[:]
+		self.init_array()
 		self.box=[[0 for i in range(0,self.n)] for j in range(0,self.n)]
 		self.tool.update(self.xy,self.box)
 		self.out=[]#the number that is enough
 		self.stop=0
+	def init_array(self):
+		for i in range(0,self.n):
+			for j in range(0,self.n):
+				if not self.xy[i][j]:
+					self.xy[i][j] = self.choice[:]
 	def list_str(self,a):
 		p=[]
 		for i in range(0,self.n):
@@ -152,7 +153,6 @@ class sudoku:
 			return 1
 		else:
 			return 0
-#device = torch.device("cuda:0")
 s=sudoku()
 s.solve()
 
